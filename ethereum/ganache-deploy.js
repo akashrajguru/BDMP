@@ -15,7 +15,7 @@ const deploy = async () => {
     .deploy({ 
         data: compiledFactory.bytecode
     })
-    .send({ from: accounts[0], gas: '1000000'});
+    .send({ from: accounts[0], gas: '3000000'});
 
     console.log('Contract deployed to address: ', result.options.address);
 };

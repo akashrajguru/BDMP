@@ -18,7 +18,7 @@ contract IotDataSellerAccount {
     
     // iot device data storage 
     struct Data {
-        string account_address;
+        address account_address;
         string deviceId;
         string timestampIOS;
         string ipfs_hash;        
@@ -33,6 +33,11 @@ contract IotDataSellerAccount {
     
     Data[] public data;
     
+    
+    modifier restricted() {
+        require(msg.sender == deviceManager);
+        _;
+    }
     
     
     
@@ -56,4 +61,19 @@ contract IotDataSellerAccount {
             deviceManager
         );
     }
+    
+    function storeDataRequest(address account_address,string deviceId,string timestampIOS, string ipfs_hash) public restricted {
+        Data memory newData = Data({
+            account_address: account_address,
+            deviceId: deviceId,
+            timestampIOS: timestampIOS,
+            ipfs_hash: ipfs_hash   
+        });
+        
+        data.push(newData);
+    }
+    
+    
+    
+    
 }

@@ -74,6 +74,8 @@ contract IotDataSellerAccount {
     }
     
     
-    
+    function getDataCount() public view returns (uint) {
+        return data.length;
+    }
     
 }

@@ -2,6 +2,7 @@ const httpStatus = require('http-status');
 const _ = require('lodash');
 const web3 = require("../utils/getWeb3");
 const ipfs = require("../utils/ipfs");
+const Tx = require('ethereumjs-tx');
 // const Tx = require('ethereumjs-tx');
 const { handler: errorHandler } = require('../middlewares/error');
 const account = require('../utils/account');
@@ -21,11 +22,11 @@ exports.load = async(req, res, next, id) => {
           });
       }
 
-      const account1 = account.getAccount(id);
-      console.log('Account : ', account1);
+      const address = id;
+      const contract = account.getAccount(address);
+      req.locals = { contract, address };
+      // console.log('Account : ', account1);
 
-     
-      
       return next();
     } catch (error) {
       
@@ -41,67 +42,65 @@ exports.load = async(req, res, next, id) => {
  */
 exports.storeData = async (req, res, next) => {
 
-  //    const storageContract = req.locals.instance;
-  //    console.log('req.body.privateKey', req.body.privateKey)
-  //    const privateKey = Buffer.from(req.body.privateKey, 'hex');
-  //    const data = _.pick(req.body, ["deviceId","deviceName"]);
-  //  // add jso data to ipfs
-  //   ipfs.files.add(Buffer.from(JSON.stringify(data)), async (error, result) => {
-  //       if(error){
-  //           console.error(error);
-  //           return;
-  //         }
-  //         console.log('IPFS Hash: ', result[0].hash);
-  //       try {
-            
-  //           // const count;
-  //           // web3.eth.getTransactionCount(req.locals.myAddress)
-  //           // .then(function(v){
-  //           //     console.log("Count :"+v);
-  //           //     // count = v;
+     const storageContract = req.locals.contract;
+     const contractOwnerAddress = req.locals.address;
+     const contractAddress = req.body.contractAddress;
+     console.log('req.body.privateKey', req.body.privateKey)
+     const privateKey = Buffer.from(req.body.privateKey, 'hex');
+     const data = _.pick(req.body, ["deviceId","timestamp"]);
+   // add jso data to ipfs
+    ipfs.files.add(Buffer.from(JSON.stringify(data)), async (error, result) => {
+        if(error){
+            console.error(error);
+            return;
+          }
+          console.log('IPFS Hash: ', result[0].hash);
+          console.log("Address is :", contractOwnerAddress);
+          console.log("Device id  :", data.deviceId);
+          console.log("timestamp  :", data.timestamp);
+          console.log("contract address: ", contractAddress);
+        try {
+          web3.eth.getTransactionCount(contractOwnerAddress)
+          .then(function(count){
+            console.log('Count :', count);
+            const tx = new Tx(null, 1);
+            tx.from = contractOwnerAddress;
+            tx.gasPrice = 6621975;
+            tx.gasLimit = 6721975;
+            tx.value = 0;
+            tx.to = contractAddress;
+            tx.data = storageContract.methods.storeDataRequest(contractOwnerAddress, data.deviceId, data.timestamp, result[0].hash).encodeABI();
+            tx.nonce = count
 
-  //           //     // const rawTransaction = {
-  //           //     // "from": req.locals.myAddress,
-  //           //     // "gasPrice": web3.utils.toHex(20* 1e9),
-  //           //     // "gasLimit": web3.utils.toHex(210000),
-  //           //     // "to":contract.abi,
-  //           //     // "value":"0x0",
-  //           //     // "data":storageContract.methods.set(result[0].hash),
-  //           //     // "nonce":web3.utils.toHex(v)
-  //           //     // }
+            tx.sign(privateKey);
 
-  //           //     const tx = new Tx(null, 1);
-  //           //     console.log('contract.abi: ',contract.networks['5777'].address);
+            // await storageContract.methods
+            // .storeDataRequest(contractOwnerAddress, data.deviceId, data.timestamp, result[0].hash)
+            // .send({from: contractOwnerAddress});
+            web3.eth.sendSignedTransaction('0x'+tx.serialize().toString('hex')).on('transactionHash',console.log);
 
+            // const rawTransaction = {
+            //   "from": contractOwnerAddress,     
+            //   "gas": "2000",
+            //   "data": storageContract.methods.storeDataRequest(contractOwnerAddress, data.deviceId, data.timestamp, result[0].hash).encodeABI()
+            // };
 
-  //           //     tx.from = req.locals.myAddress;
-  //           //     tx.gasPrice = 6621975;
-  //           //     tx.gasLimit = 6721975;
-  //           //     tx.value = 0;
-  //           //     tx.to = contract.networks['5777'].address;
-  //           //     tx.data = storageContract.methods.set(result[0].hash).encodeABI();
-  //           //     tx.nonce = v
-
-  //           //     // const con = req.locals.instance;
-  //           //     // const response = con.methods.set(result[0].hash, {from: req.locals.myAddress, gas: 200000});
-  //           //     //console.log('response', response);
-
-  //           //     //console.log('contract.abi: ',contract.networks['5777'].address);
-  //           //     //console.log('privateKey', privateKey);
-  //           //     tx.sign(privateKey);
-  //           //     web3.eth.sendSignedTransaction('0x'+tx.serialize().toString('hex'))
-  //           //     .on('transactionHash',console.log);
-
-  //           // })
+            // web3.eth.accounts.signTransaction(rawTransaction, privateKey)
+            // .then(signedTx => web3.eth.sendSignedTransaction(signedTx.rawTransaction)).then(receipt => console.log("Transaction receipt: ", receipt))
+            // .catch(err => console.error(err));
 
 
-  //           res.status(httpStatus.OK)
-  //           res.json({messsage: "OK"});
-  //       } catch (error) {
-  //           next(error)
-  //       }
-  //   });
+            })
+          .catch((error)=>{
+            console('Error  is :', error);
+          });
+          
 
-  res.status(httpStatus.OK)
-  res.json({messsage: "OK"});
+
+            res.status(httpStatus.OK)
+            res.json({messsage: "OK"});
+        } catch (error) {
+            next(error)
+        }
+    });
 }

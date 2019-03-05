@@ -5,11 +5,12 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const next = require('next')
 const app = next({dev: process.env.NODE_ENV !== 'production'});
+const pathMatch = require('path-match');
 
-//const routes = require('./routes');
+const routes = require('./routes');
 // For back-end api routes
-const routes = require('./api/routes/v1'); 
-const handler = app.getRequestHandler()
+const apiroutes = require('./api/routes/v1'); 
+const handler = routes.getRequestHandler(app);
  
 app.prepare().then(() => {
 
@@ -19,7 +20,10 @@ app.prepare().then(() => {
   server.use(bodyParser.urlencoded({ extended: true }));
 
   // mount api v1 routes
-  server.use('/api/v1', routes);
+  server.use('/api/v1', apiroutes);
+
+   // Server-side
+   const route = pathMatch();
 
 
    // Everything that isn't '/api' gets passed along to Next.js
@@ -27,10 +31,19 @@ app.prepare().then(() => {
     return handler(req, res)
    });
 
+   server.get('/', (re, res) => {
+      return app.render(req, res, '/', req.query);
+   })
    server.get('/accounts/new', (re, res) => {
       return app.render(req, res, '/accounts/new', req.query);
    })
 
+   server.get("/accounts/:address", (req, res) => {
+      const params = route('/accounts/:address')(parse(req.url).pathname);
+      return app.render(req, res, '/accounts/show', params);
+      // console.log('params : ', req.params )
+      // return app.render(req, res, "/accounts/show", {address: req.params.id});
+  });
 
 
 

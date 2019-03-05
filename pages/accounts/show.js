@@ -4,6 +4,7 @@ import Account from '../../ethereum/account';
 import { Card, Grid, Button } from 'semantic-ui-react';
 import web3 from '../../ethereum/web3';
 import { Link } from '../../routes';
+import { Router } from '../../routes';
 
 class AccountShow extends Component {
     static async getInitialProps(props) {
@@ -70,9 +71,9 @@ class AccountShow extends Component {
                     </Grid.Row>
                     <Grid.Row>
                         <Grid.Column>
-                            <Link route={`/accounts/${this.props.address}/requests`}>
+                            <Link route={`/accounts/data/${this.props.address}`}>
                                     <a>
-                                        <Button primary >View Requests</Button>
+                                        <Button primary >View Data</Button>
                                     </a>
                             </Link>
                         </Grid.Column>

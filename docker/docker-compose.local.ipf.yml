@@ -1,0 +1,18 @@
+version: "3"
+
+services:
+
+  ipfs-node:
+    image: akash14/dev-ipfs-node:1.0.1
+    hostname: ipfs_node
+    volumes:
+    - eth-ipfs-local:/export
+    - eth-ipfs-local:/data/ipfs
+    ports:
+    - 4001:4001
+    - 5001:5001
+    - 8080:8080
+
+
+volumes:
+  eth-ipfs-local:

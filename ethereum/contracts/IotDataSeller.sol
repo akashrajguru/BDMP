@@ -20,6 +20,7 @@ contract IotDataSellerAccount {
     struct Data {
         address account_address;
         string deviceId;
+        string deviceName;
         string timestampIOS;
         string ipfs_hash;        
     }
@@ -29,7 +30,10 @@ contract IotDataSellerAccount {
     address public deviceManager;
     uint public minimumPurchasePrice;
     string public dataDescription;
-    address[] public buyers;
+    // address[] public buyers;
+    
+    mapping(address => bool) public buyers;
+    uint public buyersCount;
     
     Data[] public data;
     
@@ -49,8 +53,9 @@ contract IotDataSellerAccount {
     
     
     function purchase() public payable {
-        require(msg.value > minimumPurchasePrice);
-        buyers.push(msg.sender);
+        // require(msg.value > minimumPurchasePrice);
+        buyers[msg.sender] = true;
+        buyersCount++;
     }
 
     function getSummary() public view returns (uint, uint, string, address) {
@@ -62,10 +67,11 @@ contract IotDataSellerAccount {
         );
     }
     
-    function storeDataRequest(address account_address,string deviceId,string timestampIOS, string ipfs_hash) public restricted {
+    function storeDataRequest(address account_address,string deviceId, string deviceName, string timestampIOS, string ipfs_hash) public restricted {
         Data memory newData = Data({
             account_address: account_address,
             deviceId: deviceId,
+            deviceName: deviceName,
             timestampIOS: timestampIOS,
             ipfs_hash: ipfs_hash   
         });
@@ -76,6 +82,10 @@ contract IotDataSellerAccount {
     
     function getDataCount() public view returns (uint) {
         return data.length;
+    }
+    
+    function etherTransfer() public restricted {
+        deviceManager.transfer(this.balance);
     }
     
 }

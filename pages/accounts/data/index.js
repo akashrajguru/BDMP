@@ -4,12 +4,15 @@ import { Card, Grid, Button, Table } from 'semantic-ui-react';
 import { Link } from '../../../routes';
 import Account from '../../../ethereum/account';
 import DataRow from '../../../components/DataRow';
+import web3 from '../../../ethereum/web3';
 
 class DataIndex extends Component {
 
     static async getInitialProps(props) {
         const {address} = props.query;
         const account = Account(address);
+        const summary = await account.methods.getSummary().call();
+        const minimumPurchasePrice = web3.utils.fromWei(summary[0], 'ether');
         const dataCount = await account.methods.getDataCount().call();
         // const approversCount = await campaign.methods.approversCount().call();
 
@@ -20,7 +23,7 @@ class DataIndex extends Component {
         );
 
 
-        return {address, datas, dataCount };
+        return {address, datas, dataCount, minimumPurchasePrice };
      }
  
     renderRow() {
@@ -30,6 +33,7 @@ class DataIndex extends Component {
                 id={index}
                 data={data}
                 address={this.props.address}
+                minimumPurchasePrice={this.props.minimumPurchasePrice}
             />
         })
     } 
@@ -46,7 +50,9 @@ class DataIndex extends Component {
                             <HeaderCell>ID</HeaderCell>
                             <HeaderCell>Device ID</HeaderCell>
                             <HeaderCell>Timestamp</HeaderCell>
-                            <HeaderCell>IPFS HASH</HeaderCell>
+                            <HeaderCell>Device Name</HeaderCell>
+                            <HeaderCell>Min Price</HeaderCell>
+                            <HeaderCell>Buy Data</HeaderCell>
                         </Row>
                     </Header>
                     <Body>

@@ -85,7 +85,7 @@ contract IotDataSellerAccount {
     }
     
     function etherTransfer() public restricted {
-        deviceManager.transfer(this.balance);
-    }
-    
+        // deviceManager.transfer(this.balance);
+        msg.sender.transfer(this.balance);
+    }   
 }

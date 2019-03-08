@@ -31,9 +31,9 @@ class AccountShow extends Component {
         try {
             const accounts = await web3.eth.getAccounts();
                 await account.methods.etherTransfer()
-                .send({from: accounts[0]});
+                .send({from: accounts[0], gas: 26000});
             
-                Router.pushRoute('/accounts/show');
+                Router.pushRoute(`/accounts/${this.props.address}`);
         } catch (error) {
             this.setState({ TXMessage: error.message});
             this.setState({ open: true });

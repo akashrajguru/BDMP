@@ -26,12 +26,12 @@ class AccountShow extends Component {
     }
 
     onTransferEther = async () => {
-        const account = Account(this.props.deviceManager);
-
+        const account = Account(this.props.address);
+        
         try {
             const accounts = await web3.eth.getAccounts();
-                await account.methods.etherTransfer()
-                .send({from: accounts[0], gas: 26000});
+                await account.methods.withdraw()
+                .send({from: accounts[0]});
             
                 Router.pushRoute(`/accounts/${this.props.address}`);
         } catch (error) {
@@ -100,6 +100,12 @@ class AccountShow extends Component {
                         </Grid.Column>
                         <Grid.Column width={5}>
                             <Button primary onClick={this.onTransferEther}>Transfer Balance</Button>
+                            <Confirm
+                                open={this.state.open}
+                                content= {this.state.TXMessage}
+                                onCancel={this.handleCancel}
+                                onConfirm={this.handleConfirm}
+                            />
                         </Grid.Column>
                     </Grid.Row>
                  </Grid> 

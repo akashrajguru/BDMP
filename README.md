@@ -23,3 +23,10 @@ sudo docker-compose -f docker-compose.local.ipf.yml up -d
 
 # IPFS local url
 * http://localhost:8080/ipfs/QmfHnA36LsPUqsCpnPYCz2ZAvk5noz9PnEdnbvMKgdTRFp
+
+
+#References 
+
+* https://codesandbox.io/s/l594y3qxwm
+
+* https://mycolor.space/gradient?ori=to+right+top&hex=%230F3369&hex2=%23052629&sub=1

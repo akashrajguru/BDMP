@@ -3,6 +3,8 @@ import { Card, Button } from 'semantic-ui-react';
 import factory from '../ethereum/factory';
 import Layout from '../components/Layout';
 import { Link } from '../routes';
+import Particles from 'react-particles-js';
+// import '../asset/index.css';
 
 class AccountIndex extends Component {
     static async getInitialProps() {
@@ -25,22 +27,22 @@ class AccountIndex extends Component {
 
     render() {
         return <Layout>
-            <div>
-                <h3>Data Sellers List</h3>
-                <Link route="/accounts/new">
-                    <a>
-                        <Button 
-                            content="Create Data Account" 
-                            icon="add circle"
-                            primary 
-                            floated="right"
-                            />
-                    </a>
-                </Link>
-                
-                {this.renderAccounts()}
-            </div>
-        </Layout> 
+                    <div>
+                        <h3>Data Sellers List</h3>
+                        <Link route="/accounts/new">
+                            <a>
+                                <Button 
+                                    content="Create Data Account" 
+                                    icon="add circle"
+                                    primary 
+                                    floated="right"
+                                    />
+                            </a>
+                        </Link>
+                        
+                        {this.renderAccounts()}
+                    </div>
+                </Layout> 
     };
 
 }

@@ -42,7 +42,7 @@ class DataIndex extends Component {
         const { Header, Row, HeaderCell, Body } = Table;
         return(
            <Layout>
-                <h3>Uploaded Data List</h3>
+                <h3 style={{ color: "white" }}>Uploaded Data List</h3>
         
                 <Table>
                     <Header>

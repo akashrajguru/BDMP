@@ -80,14 +80,11 @@ class AccountShow extends Component {
     render() {
         return (
             <Layout>
-                 <h3>Account Show</h3>
+                 <h3 style={{ color: "white" }}>Account Details</h3>
                  <Grid>
                      <Grid.Row>
                         <Grid.Column width={10}>
                             {this.renderCards()}
-                            </Grid.Column>
-                            <Grid.Column width={6}>
-                            {/* <ContributeForm  address={this.props.address}/> */}
                         </Grid.Column>
                     </Grid.Row>
                     <Grid.Row>

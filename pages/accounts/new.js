@@ -33,10 +33,10 @@ class AccountNew extends Component {
     render() {
         return (
             <Layout>
-                <h3>Create a new Account</h3>
+                <h3 style={{ color: "white" }} >Create a new Account</h3>
                 <Form onSubmit={this.onSubmit} error={!!this.state.errorMessage}>
                     <Form.Field>
-                    <label>Set Minimum Purchase Price</label>
+                    <label style={{ color: "white" }}>Set Minimum Purchase Price</label>
                     <Input 
                     label="ether" 
                     labelPosition="right" 
@@ -45,7 +45,7 @@ class AccountNew extends Component {
                     />
                     </Form.Field>
                     <Form.Field>
-                    <label>Data Description</label>
+                    <label style={{ color: "white" }}>Data Description</label>
                     <Input 
                     value={this.state.dataDescription}
                     onChange={event => this.setState({dataDescription: event.target.value})}

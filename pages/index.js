@@ -28,7 +28,7 @@ class AccountIndex extends Component {
     render() {
         return <Layout>
                     <div>
-                        <h3>Data Sellers List</h3>
+                        <h3  style={{ color: "white" }}>Data Sellers List</h3>
                         <Link route="/accounts/new">
                             <a>
                                 <Button 

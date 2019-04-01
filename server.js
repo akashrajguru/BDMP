@@ -1,9 +1,9 @@
 // server.js
 // look at https://www.npmjs.com/package/next-routes for express setup
-const { createServer } = require('http');
+// const { createServer } = require('http');
 const express = require('express');
 const bodyParser = require('body-parser');
-const next = require('next')
+const next = require('next');
 const app = next({dev: process.env.NODE_ENV !== 'production'});
 const pathMatch = require('path-match');
 

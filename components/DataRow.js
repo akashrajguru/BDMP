@@ -38,6 +38,7 @@ class DataRow extends Component {
                 <Cell>{data.deviceId}</Cell>
                 <Cell>{data.timestampIOS}</Cell>
                 <Cell>{data.deviceName}</Cell>
+                <Cell>{data.description}</Cell>
                 <Cell>{minimumPurchasePrice} (ether)</Cell>
                 <Cell>
                     <Button color="teal" basic onClick={this.onPurchase}>Buy</Button>

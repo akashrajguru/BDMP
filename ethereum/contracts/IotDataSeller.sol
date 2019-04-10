@@ -21,6 +21,7 @@ contract IotDataSellerAccount {
         address account_address;
         string deviceId;
         string deviceName;
+        string description;
         string timestampIOS;
         string ipfs_hash;        
     }
@@ -67,11 +68,12 @@ contract IotDataSellerAccount {
         );
     }
     
-    function storeDataRequest(address account_address,string deviceId, string deviceName, string timestampIOS, string ipfs_hash) public restricted {
+    function storeDataRequest(address account_address,string deviceId, string deviceName, string description ,string timestampIOS, string ipfs_hash) public restricted {
         Data memory newData = Data({
             account_address: account_address,
             deviceId: deviceId,
             deviceName: deviceName,
+            description: description,
             timestampIOS: timestampIOS,
             ipfs_hash: ipfs_hash   
         });

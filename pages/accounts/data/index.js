@@ -51,6 +51,7 @@ class DataIndex extends Component {
                             <HeaderCell>Device ID</HeaderCell>
                             <HeaderCell>Timestamp</HeaderCell>
                             <HeaderCell>Device Name</HeaderCell>
+                            <HeaderCell>Description</HeaderCell>
                             <HeaderCell>Min Price</HeaderCell>
                             <HeaderCell>Buy Data</HeaderCell>
                         </Row>

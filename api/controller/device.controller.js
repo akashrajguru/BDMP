@@ -47,7 +47,7 @@ exports.storeData = async (req, res, next) => {
      const contractAddress = req.body.contractAddress;
      console.log('req.body.privateKey', req.body.privateKey)
      const privateKey = Buffer.from(req.body.privateKey, 'hex');
-     const data = _.pick(req.body, ["deviceId", "deviceName", "timestamp", "data"]);
+     const data = _.pick(req.body, ["deviceId", "deviceName", "description", "timestamp", "data"]);
    // add jso data to ipfs
     ipfs.files.add(Buffer.from(JSON.stringify(data)), async (error, result) => {
         if(error){
@@ -57,6 +57,7 @@ exports.storeData = async (req, res, next) => {
           console.log('IPFS Hash: ', result[0].hash);
           console.log("Address is :", contractOwnerAddress);
           console.log("Device id  :", data.deviceId);
+          console.log("Device id  :", data.description);
           console.log("timestamp  :", data.timestamp);
           console.log("contract address: ", contractAddress);
         try {
@@ -69,7 +70,7 @@ exports.storeData = async (req, res, next) => {
             tx.gasLimit = 6721975;
             tx.value = 0;
             tx.to = contractAddress;
-            tx.data = storageContract.methods.storeDataRequest(contractOwnerAddress, data.deviceId, data.deviceName, data.timestamp, result[0].hash).encodeABI();
+            tx.data = storageContract.methods.storeDataRequest(contractOwnerAddress, data.deviceId, data.deviceName, data.description ,data.timestamp, result[0].hash).encodeABI();
             tx.nonce = count
 
             tx.sign(privateKey);
